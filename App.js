@@ -1,30 +1,21 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, View, FlatList, TouchableOpacity, Modal } from 'react-native';
 import colors from './Colors';
 import { AntDesign } from '@expo/vector-icons';
-import tempData from './tempData';
+import store from './store';
 import CarList from './components/CarList';
 import AddListModal from './components/AddListModal';
+import { observer } from 'mobx-react-lite';
 
-export default class App extends React.Component {
-  state = {
-    addCarVisible: false,
-  };
-
-  toggleAddCarModal() {
-    this.setState({ addCarVisible: !this.state.addCarVisible });
-  }
-
-  render() {
+const App = () => {
+  const [visible, setVisible] = useState(false);
+  console.log(store);
+  {
     return (
       <View style={styles.container}>
-        <Modal
-          animationType="slide"
-          visible={this.state.addCarVisible}
-          onRequestClose={() => this.toggleAddCarModal()}
-        >
-          <AddListModal closeModal={() => this.toggleAddCarModal()} />
+        <Modal animationType='slide' visible={visible} onRequestClose={() => setVisible(!visible)}>
+          <AddListModal closeModal={() => setVisible(!visible)} />
         </Modal>
         <View style={{ flexDirection: 'row', width: '100%' }}>
           <View style={styles.divider} />
@@ -34,8 +25,8 @@ export default class App extends React.Component {
           <View style={styles.divider} />
         </View>
         <View style={{ marginVertical: 48 }}>
-          <TouchableOpacity style={styles.addBtn} onPress={() => this.toggleAddCarModal()}>
-            <AntDesign name="plus" size={16} color={colors.blue}></AntDesign>
+          <TouchableOpacity style={styles.addBtn} onPress={() => setVisible(!visible)}>
+            <AntDesign name='plus' size={16} color={colors.blue}></AntDesign>
           </TouchableOpacity>
 
           <Text style={styles.add}>Add Car</Text>
@@ -43,8 +34,8 @@ export default class App extends React.Component {
 
         <View style={{ height: 280, paddingLeft: 32 }}>
           <FlatList
-            data={tempData}
-            keyExtractor={(item) => item.name}
+            data={store._carInfo}
+            keyExtractor={(item) => item.Name}
             horizontal={true}
             showsHorizontalScrollIndicator={false}
             renderItem={({ item }) => <CarList list={item} />}
@@ -53,7 +44,7 @@ export default class App extends React.Component {
       </View>
     );
   }
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -90,3 +81,5 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
 });
+
+export default observer(App);

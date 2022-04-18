@@ -1,24 +1,28 @@
+import { observer } from 'mobx-react-lite';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import tempData from '../store';
 import colors from '../Colors';
 
 const CarList = ({ list }) => {
   return (
-    <View style={[styles.listContainer, { backgroundColor: list.color }]}>
-      <Text style={styles.listTitle} numberOfLines={1}>
-        {list.name}
-      </Text>
+    <TouchableOpacity key={list} onPress={() => tempData.deleteCar(list)}>
+      <View style={[styles.listContainer, { backgroundColor: list.color }]}>
+        <Text style={styles.listTitle} numberOfLines={1}>
+          {list.name}
+        </Text>
 
-      <View>
         <View>
-          <Text style={styles.brand}>Марка: {list.car.map((car) => car.name)}</Text>
-          <Text style={styles.brand}>Модель: {list.car.map((car) => car.brand)}</Text>
-          <Text style={styles.brand}>Мах Мощность: {list.car.map((car) => car.maxPow)}</Text>
-          <Text style={styles.brand}>Мах обороты: {list.car.map((car) => car.MaxAround)}</Text>
-          <Text style={styles.brand}>Мах разгон: {list.car.map((car) => car.timeSpeed)}</Text>
+          <View>
+            <Text style={styles.brand}>Марка: {list.CarName}</Text>
+            <Text style={styles.brand}>Модель: {list.CarBrand}</Text>
+            <Text style={styles.brand}>Мах Мощность: {list.CarPow}</Text>
+            <Text style={styles.brand}>Мах обороты: {list.CarAround}</Text>
+            <Text style={styles.brand}>Мах разгон: {list.CarSpeed}</Text>
+          </View>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -44,4 +48,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CarList;
+export default observer(CarList);

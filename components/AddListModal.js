@@ -6,113 +6,129 @@ import {
   TouchableOpacity,
   TextInput,
 } from 'react-native';
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { AntDesign } from '@expo/vector-icons';
 import colors from '../Colors';
-import tempData from '../tempData';
+import tempData from '../store';
+import { observer } from 'mobx-react-lite';
 
-export default class AddListModal extends Component {
-  backgroundColors = ['green', 'red', 'orange', 'purple', 'yellow', 'blue', 'aqua'];
-  state = {
-    name: '',
-    color: this.backgroundColors[0],
-    CarName: '',
-    CarBrand: '',
-    CarPow: '',
-    CarAround: '',
-    CarSpeed: '',
-  };
+const AddListModal = (props) => {
+  const backgroundColors = [
+    '#E9BDF0',
+    '#DCECE1',
+    '#E9BBAE',
+    '#A496F8',
+    '#5B738F',
+    '#A9B37F',
+    '#714F43',
+  ];
 
-  createCar = () => {
-    const { name, color, CarName, CarBrand, CarPow, CarAround, CarSpeed } = this.state;
-    tempData.push({
-      name,
-      color,
-      car: [
-        { name: CarName },
-        { brand: CarBrand },
-        { maxPow: CarPow },
-        { maxAround: CarAround },
-        { timeSpeed: CarSpeed },
-      ],
+  const [colorBg, setColorBg] = useState(backgroundColors[0]);
+  const [name, setName] = useState('');
+  const [carName, setCarName] = useState('');
+  const [carBrand, setCarBrand] = useState('');
+  const [carPow, setCarPow] = useState(0);
+  const [carAround, setCarAround] = useState(0);
+  const [carSpeed, setCarSpeed] = useState(0);
+
+  const createCar = () => {
+    tempData.setInfoCar({
+      id: Math.floor(Math.random() * 100000),
+      name: name,
+      color: colorBg,
+      CarName: carName,
+      CarBrand: carBrand,
+      CarPow: carPow,
+      CarAround: carAround,
+      CarSpeed: carSpeed,
     });
-
-    this.setState({ name: '' });
-    this.props.closeModal();
+    props.closeModal();
   };
 
-  renderColor() {
-    return this.backgroundColors.map((color) => {
+  const renderColor = () => {
+    return backgroundColors.map((color) => {
       return (
         <TouchableOpacity
           key={color}
           style={[styles.colorSelect, { backgroundColor: color }]}
-          onPress={() => this.setState({ color })}
+          onPress={() => setColorBg(color)}
         />
       );
     });
-  }
+  };
 
-  render() {
+  {
     return (
-      <KeyboardAvoidingView style={styles.container} behavior="padding">
+      <KeyboardAvoidingView style={styles.container} behavior='padding'>
         <TouchableOpacity
           style={{ alignItems: 'flex-end', padding: 20 }}
-          onPress={this.props.closeModal}
+          onPress={props.closeModal}
         >
-          <AntDesign name="close" size={24} color={colors.black} />
+          <AntDesign name='close' size={24} color={colors.black} />
         </TouchableOpacity>
-        <View style={{ alignSelf: 'stretch', marginHorizontal: 32 }}>
+        <View style={{ display: 'flex', alignSelf: 'stretch', marginHorizontal: 32 }}>
           <Text style={styles.title}> Create</Text>
           <TextInput
+            returnKeyType='next'
+            autoFocus={true}
             style={styles.input}
-            placeholder="List Name?"
-            onChangeText={(text) => this.setState({ name: text })}
+            placeholder='List Name?'
+            onChangeText={(text) => setName(text)}
           />
           <TextInput
+            returnKeyType='next'
+            autoFocus={true}
             style={styles.input}
-            placeholder="Car Name?"
-            onChangeText={(text) => this.setState({ CarName: text })}
+            placeholder='Car Name?'
+            onChangeText={(text) => setCarName(text)}
           />
           <TextInput
+            returnKeyType='next'
+            autoFocus={true}
             style={styles.input}
-            placeholder="Brand Name?"
-            onChangeText={(text) => this.setState({ CarBrand: text })}
+            placeholder='Brand Name?'
+            onChangeText={(text) => setCarBrand(text)}
           />
           <TextInput
+            returnKeyType='next'
+            autoFocus={true}
             style={styles.input}
-            placeholder="Max Power"
-            onChangeText={(text) => this.setState({ CarPow: text })}
+            placeholder='Max Power'
+            onChangeText={(text) => setCarPow(text)}
           />
           <TextInput
+            returnKeyType='next'
+            autoFocus={true}
             style={styles.input}
-            placeholder="Max Around"
-            onChangeText={(text) => this.setState({ CarAround: text })}
+            placeholder='Max Around'
+            onChangeText={(text) => setCarAround(text)}
           />
           <TextInput
+            returnKeyType='next'
+            autoFocus={true}
             style={styles.input}
-            placeholder="Max Speed"
-            onChangeText={(text) => this.setState({ CarSpeed: text })}
+            placeholder='Max Speed'
+            onChangeText={(text) => setCarSpeed(text)}
           />
 
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 12 }}>
-            {this.renderColor()}
+            {renderColor()}
           </View>
 
           <TouchableOpacity
-            style={[styles.create, { backgroundColor: this.state.color }]}
-            onPress={this.createCar}
+            style={[styles.createBt, { backgroundColor: colorBg }]}
+            onPress={createCar}
           >
-            <Text style={{ color: colors.white, fontWeight: '600' }}>Create</Text>
+            <Text style={{ color: colors.white, fontWeight: '800', fontSize: 20 }}>Create</Text>
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
     );
   }
-}
+};
 
 const styles = StyleSheet.create({
-  contsiner: {
+  container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
@@ -132,7 +148,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     paddingHorizontal: 16,
   },
-  create: {
+  createBt: {
     marginTop: 24,
     height: 50,
     borderRadius: 6,
@@ -145,3 +161,5 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
 });
+
+export default observer(AddListModal);
