@@ -11,6 +11,9 @@ const CarList = ({ list }) => {
         <Text style={styles.listTitle} numberOfLines={1}>
           {list.name}
         </Text>
+        <Text style={styles.id} numberOfLines={1}>
+          id:{list.id}
+        </Text>
 
         <View>
           <View>
@@ -40,6 +43,12 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: colors.white,
     marginBottom: 10,
+  },
+  id: {
+    position: 'absolute',
+    top: 5,
+    left: 10,
+    color: colors.white,
   },
   brand: {
     fontSize: 20,

@@ -33,7 +33,7 @@ const AddListModal = (props) => {
 
   const createCar = () => {
     tempData.setInfoCar({
-      id: Math.floor(Math.random() * 100000),
+      id: Math.floor(Math.random() * 1000),
       name: name,
       color: colorBg,
       CarName: carName,

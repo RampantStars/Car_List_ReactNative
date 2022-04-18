@@ -34,8 +34,8 @@ const App = () => {
 
         <View style={{ height: 280, paddingLeft: 32 }}>
           <FlatList
-            data={store._carInfo}
-            keyExtractor={(item) => item.Name}
+            data={store.carInfo}
+            keyExtractor={(item) => item.id}
             horizontal={true}
             showsHorizontalScrollIndicator={false}
             renderItem={({ item }) => <CarList list={item} />}
